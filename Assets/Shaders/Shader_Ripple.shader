@@ -1,4 +1,4 @@
-Shader "Unlit/Shader_VertexOffset"
+Shader "Unlit/Shader_Ripple"
 {
     Properties
     {
