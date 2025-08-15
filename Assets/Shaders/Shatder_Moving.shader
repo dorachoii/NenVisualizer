@@ -8,7 +8,6 @@ Shader "Unlit/Shader_Moving"
         _ColorEnd ("Color End", Range(0,1)) = 1
     } 
 
-
     SubShader
     {
         Tags { "RenderType"="Opaque" }
@@ -58,16 +57,16 @@ Shader "Unlit/Shader_Moving"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                //float xOffset = i.uv.y; // diagonal line
-                // float xOffset = cos(i.uv.y * TAU * 8) * 0.1; // wave line
                 float xOffset = cos(i.uv.y * TAU * 8) * 0.01; // watermelon line
 
-                float t = cos((i.uv.x + xOffset) * TAU * 15) * 0.5 + 0.5;
-                return t;
+                float t = cos((i.uv.x + xOffset + _Time.y * 0.1) * TAU * 15) * 0.5 + 0.5;
+                t *= 1 - i.uv.y; // fade out
+                
+                return lerp(_ColorB, _ColorA, t);
             }
             
             ENDCG
-        }
+        } 
     }
 }
 
