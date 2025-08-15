@@ -1,8 +1,10 @@
-Shader "Unlit/Shader_Normal"
+Shader "Unlit/Shader_Scale"
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1)
+        _ColorA ("Color", Color) = (1,1,1,1)
+        _Scale ("UV Scale", Float) = 1.0
+        _Offset ("UV Offset", Float) = 0
     } 
 
 
@@ -20,6 +22,8 @@ Shader "Unlit/Shader_Normal"
             #include "UnityCG.cginc"
 
             float4 _Color;
+            float _Scale;
+            float _Offset;
 
             struct MeshData
             {
@@ -32,22 +36,25 @@ Shader "Unlit/Shader_Normal"
             {
                 float4 vertex : SV_POSITION;
                 float3 normal : TEXCOORD0;
+                float2 uv : TEXCOORD1;
             };
 
             Interpolators vert (MeshData v)
             {
                 Interpolators o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.normal = UnityObjectToWorldNormal(v.normals);// 내장함수: 법선벡터를 world space로 변환
-                //o.normal = mul(v.normals, (float3x3)unity_ObjectToWorld); // 수동
+                o.normal = UnityObjectToWorldNormal(v.normals);
+                o.uv = (v.uv0 + _Offset) * _Scale; // longer or shorter하게 하는 것임. // frag에서 해도 되지만, vertex에서 해야 더 정확함.
                 return o;
             }
 
             float4 frag (Interpolators i) : SV_Target
             {
-                return float4(i.normal, 1);
+                return float4(i.uv, 0, 1);
             }
+            
             ENDCG
         }
     }
 }
+
