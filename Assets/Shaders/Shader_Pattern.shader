@@ -1,4 +1,4 @@
-Shader "Unlit/Shader_Gradients"
+Shader "Unlit/Shader_Pattern"
 {
     Properties
     {
@@ -21,6 +21,7 @@ Shader "Unlit/Shader_Gradients"
             #pragma fragment frag
        
             #include "UnityCG.cginc"
+            #define TAU 6.28318530718
 
             float4 _ColorA;
             float4 _ColorB;
@@ -57,15 +58,8 @@ Shader "Unlit/Shader_Gradients"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                // Blend between two colors based on x UV coordinates
-            
-                // saturate : 값을 0~1로 제한
-                float t = saturate(InverseLerp(_ColorStart, _ColorEnd, i.uv.x));
-
-                t = frac(t);
-
-                float4 outColor = lerp(_ColorA, _ColorB, t);
-                return outColor;
+                float2 t = cos(i.uv.xy * TAU * 2) * 0.5 + 0.5;
+                return float4(t, 0, 1);
             }
             
             ENDCG

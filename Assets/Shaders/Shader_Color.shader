@@ -1,4 +1,4 @@
-Shader "Unlit/Shader1 green"
+Shader "Unlit/Shader_Color"
 {
     //Properties는 vert랑 frag 모두에서 접근 가능
     Properties

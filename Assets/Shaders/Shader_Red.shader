@@ -28,10 +28,10 @@ Shader "Unlit/Shader_Red"
             // Automatically filled by Unity
             struct MeshData // per-vertex mesh data
             {
-                float4 vertex : POSITION; //vertex position 정점 위치
-                float3 normal : NORMAL; //normal vector 법선 벡터
-                //float3 tangent : TANGENT;
-                //float4 color: COLOR;
+                float4 vertex : POSITION; //local space vertex position 정점 위치
+                float3 normal : NORMAL; //local space normal direction 법선 벡터
+                //float3 tangent : TANGENT; // tangent direction(xyz) tangent sign(w)
+                //float4 color: COLOR; // vertex colors
                 float2 uv0 : TEXCOORD0; // uv coordinates 텍스처 매핑할 때 쓰기도 함.
                 //float2 uv1 : TEXCOORD1; 
             };
