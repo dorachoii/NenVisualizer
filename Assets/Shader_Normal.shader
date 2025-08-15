@@ -38,7 +38,7 @@ Shader "Unlit/Shader_Normal"
             {
                 Interpolators o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.normal = v.normals;
+                o.normal = UnityObjectToWorldNormal(v.normals);
                 return o;
             }
 
