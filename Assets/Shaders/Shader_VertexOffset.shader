@@ -12,20 +12,11 @@ Shader "Unlit/Shader_VertexOffset"
     {
         Tags 
         { 
-            "RenderType"="Transparent" // tag to inform the render pipeline of what type this is
-            "Queue"="Transparent" // changes the render order
+            "RenderType"="Opaque" // tag to inform the render pipeline of what type this is
         }
 
         Pass
         {
-            // pass tags
-            Cull Off
-            ZWrite Off
-            //ZTest Always // 모든 픽셀을 그림
-        
-            // source * A += destination * B
-            Blend One One // Additive   // 이것만 해주면 light to the depth buffer
-            //Blend DstColor Zero // Multiplicative
 
             CGPROGRAM
 
@@ -70,16 +61,9 @@ Shader "Unlit/Shader_VertexOffset"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                float xOffset = cos(i.uv.x * TAU * 8) * 0.01; // watermelon line
-
-                float t = cos((i.uv.y + xOffset + _Time.y * 0.1) * TAU * 15) * 0.5 + 0.5;
-                t *= 1 - i.uv.y; // fade out
-
-                float topBottomRemover = t *( abs(i.normal.y) < 0.999);
-                float waves = t * topBottomRemover;
-                
-                float4 gradient = lerp(_ColorA, _ColorB, i.uv.y);
-                return gradient * waves;
+                float t = cos((i.uv.y - _Time.y * 0.1) * TAU * 5) * 0.5 + 0.5;
+                t *= 1 - i.uv.y;
+                return t;
             }
             
             ENDCG
