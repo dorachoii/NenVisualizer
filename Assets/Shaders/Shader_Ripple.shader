@@ -47,12 +47,22 @@ Shader "Unlit/Shader_Ripple"
                 float2 uv : TEXCOORD1;
             };
 
+            float GetWave(float2 uv)
+            {
+                float2 uvsCentered = uv * 2 - 1;
+                float radialDistance = length(uvsCentered);
+
+                // i.uv.y: 높이 대신, distance from center를 넣어보자!
+                float wave = cos((radialDistance - _Time.y * 0.1) * TAU * 5) * 0.5 + 0.5;
+                wave *= 1 - radialDistance;
+                return wave;
+            }
+
             Interpolators vert (MeshData v)
             {
                 Interpolators o;
 
-                float wave = cos((v.uv0.y - _Time.y * 0.1) * TAU * 5);
-                v.vertex.y = wave * _WaveAmp;
+                v.vertex.y = GetWave(v.uv0) * _WaveAmp;
 
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.normal = UnityObjectToWorldNormal(v.normals);
@@ -65,10 +75,11 @@ Shader "Unlit/Shader_Ripple"
                 return (value - a) / (b - a);
             }
 
+          
+
             float4 frag (Interpolators i) : SV_Target
             {
-                float wave = cos((i.uv.y - _Time.y * 0.1) * TAU * 5) * 0.5 + 0.5;
-                return wave;
+                return GetWave(i.uv);
             }
             
             ENDCG
