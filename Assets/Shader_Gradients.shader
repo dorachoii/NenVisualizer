@@ -58,18 +58,12 @@ Shader "Unlit/Shader_Gradients"
             float4 frag (Interpolators i) : SV_Target
             {
                 // Blend between two colors based on x UV coordinates
-                // float4 outColor = lerp(_ColorA, _ColorB, i.uv.x);
-                //return outColor;
+            
+                // saturate : 값을 0~1로 제한
+                float t = saturate(InverseLerp(_ColorStart, _ColorEnd, i.uv.x));
 
-                // float t = InverseLerp(_ColorStart, _ColorEnd, i.uv.x);       
-                // return t;
-
-                float t = InverseLerp(_ColorStart, _ColorEnd, i.uv.x);
-
-                // frac = v - floar(v)
-                // 0,1clamp를 안해주기 때문에 수동으로 해줘야 한다.
                 t = frac(t);
-                
+
                 float4 outColor = lerp(_ColorA, _ColorB, t);
                 return outColor;
             }
