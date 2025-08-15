@@ -1,4 +1,4 @@
-Shader "Unlit/Shader1"
+Shader "Unlit/Shader_Red"
 {
     //InputData (lighting, mesh) 등의 정보
     Properties
@@ -64,9 +64,13 @@ Shader "Unlit/Shader1"
             //원래 fixed4였는데 float4으로 바꿈
             float4 frag (Interpolators i) : SV_Target
             {
+                float4 myValue;
+                float2 otherValue = myValue.gr; // swizzling: red, green 값을 바꿔 적용
+
+
                 return float4(1,0,0,1);//red
             }
-            ENDCG
+            ENDCG//HSLS코드가 끝나는 시점
         }
     }
 }
