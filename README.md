@@ -25,6 +25,7 @@
 
 ## 📖 Game Overview
 
+<img src="https://github.com/user-attachments/assets/0b659be8-509e-49a8-86e2-56f78a8cc8cd" alt="segaPPT의 사본 (1)-1" width="800"/>
 
 
 
