@@ -28,11 +28,11 @@
 <img src="https://github.com/user-attachments/assets/0b659be8-509e-49a8-86e2-56f78a8cc8cd" alt="segaPPT의 사본 (1)-1" width="800"/>
 
 
-
 ---
 
 ## ⚙️ Technical Summary
-
+<img src="https://github.com/user-attachments/assets/a814d71a-eedb-4387-9d5d-20582d2f9951" alt="mizukisiki-1" width="800"/>
+<img src="https://github.com/user-attachments/assets/f45bf46f-5978-4921-84ff-c09cb9238812" alt="mizukisiki-2" width="800"/>
 
 
 
