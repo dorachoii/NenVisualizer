@@ -9,6 +9,9 @@ public class NenHand : MonoBehaviour
     [Header("Aura Animation")]
     public float fadeSpeed = 5f; // 오오라 페이드 인/아웃 속도
     
+    [Header("Nen Manager Reference")]
+    public NenManager nenManager; // NenManager 참조
+    
     private bool isAuraActive = false;
     private Renderer auraRenderer;
     private Material auraMaterialInstance; // 머티리얼 인스턴스
@@ -30,44 +33,164 @@ public class NenHand : MonoBehaviour
         
         if (auraObject != null)
         {
+            // Renderer 컴포넌트 체크
             auraRenderer = auraObject.GetComponent<Renderer>();
             
-            // 머티리얼 인스턴스 생성 (실시간 수정을 위해)
-            if (auraMaterial != null)
+            if (auraRenderer != null)
             {
-                auraMaterialInstance = new Material(auraMaterial);
-                auraRenderer.material = auraMaterialInstance;
+                // 머티리얼 인스턴스 생성 (실시간 수정을 위해)
+                if (auraMaterial != null)
+                {
+                    auraMaterialInstance = new Material(auraMaterial);
+                    auraRenderer.material = auraMaterialInstance;
+                }
+                else
+                {
+                    // 머티리얼이 할당되지 않았다면 현재 머티리얼의 인스턴스 생성
+                    if (auraRenderer.material != null)
+                    {
+                        auraMaterialInstance = new Material(auraRenderer.material);
+                        auraRenderer.material = auraMaterialInstance;
+                    }
+                    else
+                    {
+                        Debug.LogError("No material found on aura object: " + auraObject.name);
+                        return;
+                    }
+                }
+                
+                // 초기에는 오오라 완전히 비활성화
+                SetAuraIntensity(0f);
             }
             else
             {
-                // 머티리얼이 할당되지 않았다면 현재 머티리얼의 인스턴스 생성
-                auraMaterialInstance = new Material(auraRenderer.material);
-                auraRenderer.material = auraMaterialInstance;
+                Debug.LogError("No Renderer component found on aura object: " + auraObject.name + 
+                             "\nPlease add a MeshRenderer or SkinnedMeshRenderer component.");
             }
-            
-            // 초기에는 오오라 완전히 비활성화
-            SetAuraIntensity(0f);
         }
         else
         {
             Debug.LogWarning("Aura object not found! Please assign an aura object or create one with name: " + gameObject.name + "_Aura");
         }
+        
+        // NenManager 자동 찾기
+        if (nenManager == null)
+        {
+            nenManager = FindObjectOfType<NenManager>();
+        }
     }
 
     void Update()
     {
-        // Space바 입력 감지
+        // 입력 감지 (스페이스바 또는 터치)
+        bool inputDetected = false;
+        
+        // 스페이스바 입력 감지
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SetAuraActive(true);
+            OnInputPressed();
+            inputDetected = true;
         }
         else if (Input.GetKeyUp(KeyCode.Space))
         {
-            SetAuraActive(false);
+            OnInputReleased();
+            inputDetected = true;
+        }
+        
+        // 터치 입력 감지 (스페이스바 입력이 없을 때만)
+        if (!inputDetected)
+        {
+            HandleTouchInput();
         }
         
         // 오오라 강도 애니메이션
         UpdateAuraAnimation();
+    }
+    
+    // 터치 입력 처리
+    void HandleTouchInput()
+    {
+        // 터치 입력 감지 (화면 상단 30% 제외)
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0); // 첫 번째 터치만 처리
+            
+            // 화면 상단 30% 제외하고 터치 감지
+            if (touch.position.y < Screen.height * 0.7f)
+            {
+                switch (touch.phase)
+                {
+                    case TouchPhase.Began:
+                        // 터치 시작
+                        OnInputPressed();
+                        break;
+                        
+                    case TouchPhase.Ended:
+                    case TouchPhase.Canceled:
+                        // 터치 종료
+                        OnInputReleased();
+                        break;
+                }
+            }
+        }
+        
+        // 마우스 입력도 터치로 처리 (PC에서 테스트용, 화면 상단 30% 제외)
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Input.mousePosition.y < Screen.height * 0.7f)
+            {
+                OnInputPressed();
+            }
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            if (Input.mousePosition.y < Screen.height * 0.7f)
+            {
+                OnInputReleased();
+            }
+        }
+    }
+    
+    void OnInputPressed()
+    {
+        // 오오라 활성화
+        SetAuraActive(true);
+        
+        // NenManager에 이벤트 전달
+        if (nenManager != null)
+        {
+            nenManager.OnNenActivate();
+        }
+    }
+    
+    // 입력 종료
+    void OnInputReleased()
+    {
+        if (isAuraActive)
+        {
+            isAuraActive = false;
+            
+            // 오오라 비활성화
+            SetAuraActive(false);
+            
+            // NenManager에 이벤트 전달
+            if (nenManager != null)
+            {
+                nenManager.OnNenDeactivate();
+            }
+            
+            // LeafSpin이 활성화되어 있다면 StopSpinning 호출
+            if (nenManager != null && nenManager.GetCurrentNenType() == NenManager.NenType.Sousa)
+            {
+                LeafSpin leafSpin = nenManager.leafObject?.GetComponent<LeafSpin>();
+                if (leafSpin != null && leafSpin.enabled)
+                {
+                    leafSpin.StopSpinning();
+                }
+            }
+            
+            Debug.Log("Input deactivated - Aura and Nen effects stopped!");
+        }
     }
     
     void UpdateAuraAnimation()
@@ -97,7 +220,7 @@ public class NenHand : MonoBehaviour
     
     void SetAuraIntensity(float intensity)
     {
-        if (auraMaterialInstance != null)
+        if (auraMaterialInstance != null && auraObject != null)
         {
             // 머티리얼 인스턴스의 셰이더 프로퍼티들을 실시간으로 조정
             auraMaterialInstance.SetFloat(AURA_INTENSITY_PROP, intensity);
@@ -126,6 +249,17 @@ public class NenHand : MonoBehaviour
     public float GetAuraIntensity()
     {
         return currentAuraIntensity;
+    }
+    
+    // 외부에서 회전 축 변경 가능
+    public void SetRotationAxis(Vector3 axis)
+    {
+        // LeafSpin 스크립트가 있다면 회전 축 변경
+        LeafSpin leafSpin = GetComponent<LeafSpin>();
+        if (leafSpin != null)
+        {
+            leafSpin.SetRotationAxis(axis);
+        }
     }
     
     // 메모리 정리

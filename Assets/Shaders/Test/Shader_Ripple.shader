@@ -48,11 +48,9 @@ Shader "Unlit/Shader_Ripple"
             };
 
             float GetWave(float2 uv)
-            {
-                float2 uvsCentered = uv;
-                float radialDistance = length(uvsCentered);
+            {   
+                float radialDistance = length(uv);
 
-                // i.uv.y: 높이 대신, distance from center를 넣어보자!
                 float wave = cos((radialDistance - _Time.y * 0.1) * TAU * 5) * 0.5 + 0.5;
                 wave *= 1 - radialDistance;
                 return wave;
@@ -70,10 +68,6 @@ Shader "Unlit/Shader_Ripple"
                 return o;
             }
 
-            float InverseLerp(float a, float b, float value)
-            {
-                return (value - a) / (b - a);
-            }  
 
             float4 frag (Interpolators i) : SV_Target
             {
