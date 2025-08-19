@@ -33,6 +33,16 @@
 ## ⚙️ Technical Summary
 <img src="https://github.com/user-attachments/assets/a814d71a-eedb-4387-9d5d-20582d2f9951" alt="mizukisiki-1" width="800"/>
 <img src="https://github.com/user-attachments/assets/f45bf46f-5978-4921-84ff-c09cb9238812" alt="mizukisiki-2" width="800"/>
-
+<img src="https://github.com/user-attachments/assets/c956d1fb-e7c6-4e92-b1eb-e68ad74f04db" alt="segaPPT-01" width="800"/>
+<img src="https://github.com/user-attachments/assets/eaf89f13-2fe0-40d4-9fe9-e527bbda5dd5" alt="segaPPT-02" width="800"/>
+<img src="https://github.com/user-attachments/assets/a8eb9be1-355a-4c1a-8e0c-3984c585d907" alt="segaPPT-03" width="800"/>
+<img src="https://github.com/user-attachments/assets/3d09ab4e-63a0-4813-8e93-85bf27efc9f0" alt="segaPPT-04" width="800"/>
+<img src="https://github.com/user-attachments/assets/cfd2616d-f02a-4881-837e-5f435ec16981" alt="segaPPT-05" width="800"/>
+<img src="https://github.com/user-attachments/assets/a1011dc8-bcaa-45ac-b2e7-781365a9a30f" alt="segaPPT-06" width="800"/>
+<img src="https://github.com/user-attachments/assets/92e30b08-10da-4cb7-84db-5bd0a52e9e41" alt="segaPPT-07" width="800"/>
+<img src="https://github.com/user-attachments/assets/40df431d-64a0-48a7-bd5f-15357da23d17" alt="segaPPT-08" width="800"/>
+<img src="https://github.com/user-attachments/assets/288893f6-04e4-4221-87dd-3a1a2fce2349" alt="segaPPT-09" width="800"/>
+<img src="https://github.com/user-attachments/assets/1c278c09-2a57-4aec-bc2a-8a893ef7219a" alt="segaPPT-10" width="800"/>
+<img src="https://github.com/user-attachments/assets/8248a083-3f2e-4ff3-abb5-1e52ec267f55" alt="segaPPT-11" width="800"/>
 
 
